@@ -1,54 +1,26 @@
-# Flatiron School Data Engineering 
 
-Hello, thanks for your interest in a data engineering role at Flatiron School!
+#  Data engineering for "batch" (student group/cohort/class) performance analysis at Flatiron School  
 
-## Objective
 
-Given 3 sources of simulated education data, construct a data pipeline prototype that
-showcases your capabilities as a problem solver.
+This pipeline culminates in the creation of a **database table** named `batches` that enables data analysts to easily report on the **batches** with the **most students that have completed at least 3 lessons**   
 
-The pipeline should culminate in the creation of a database table that would enable
-a data analyst to easily report on the batches with the most students that
-have completed at least 3 lessons (definitions found in Data Sources section).
 
-This project is very open ended and many hours could easily be invested implementing a solution. Please limit yourself to no more than 3 hours, good timeboxing is as valuable a skill as any!
+> New batches are continuously added to the REST API, up to 100, but could keep going  
+> New students are continueously added to the `students` table in SQLite  
+> New test_Runs are continueously added to the test_runs.log file  
 
-## Setup
 
-Install Python 3.7 and the dependencies in `requirements.txt`.
 
-## Scripts
+We will approach this project both as a Batch Data Processing project as well as a Streaming Data Processing project.  That is, we will simulate an environement where we already have large amounts of data in our 3 sources, and we plan to plan to continuously inject in more of said data as Flatiron School continues to operates.
 
-* `bin/generate`: Start the data generator.
-* `bin/reset`: Delete all generated data.
+PySpark will be our processing tool of source as it works well with Batch processes, and we can make use of Spark Streaming for future and real time data
 
-## Data Sources
 
-### SQLite Student Database
 
-New student records are continuously generated and written to a [SQLite](https://www.sqlite.org/index.html) database located at `data/students.db`.
 
-### Batch REST API
 
-Batches are groups of students, aka a class or section.
 
-The following endpoint responds with a JSON array of up to 100 batch records ordered by creation date being continuously generated.
 
-`GET localhost:8000/batches`
-
-The endpoint accepts an `after` query string parameter, which will return records
-only created after the specified time. The format for the time paramater is: `YYYY-MM-DDTHH:MM:SS.SSS`.
-
-### Test Run Log
-
-Test runs are the result of a student executing the test suite for a given
-lesson. New data is continuously appended to `data/test_runs.log` as lines of JSON objects.
-
-A test run is considered to have been "completed" if the left hand side of the "results" field is equal to the right hand side.
-
-## Tips
-
-If you don't want to mess with a database server for this project then
-[SQLite](https://www.sqlite.org/index.html) can be a useful option. If you're
-interested in seeing it being used with Python you can check it out in `data_generator.py`.
-# data-engineering-take-home-Flatiron_School-WeWork
+> Student table query remains the same (SELECT * FROM students), 
+    - maybe we'd like to add a 'completed' field (int) that keeps track of number lessons the student has completed
+> Every test_runs Dstream, we update students records
