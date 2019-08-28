@@ -1,0 +1,3 @@
+echo "######## Initializing data generator... #######"
+
+python data_generator.py
